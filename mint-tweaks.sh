@@ -2,33 +2,61 @@
 
 : "${DIALOG_OK:=0}"
 
-text="Adjusts annoying default settings
+confirm_change() {
+	dialog \
+		--defaultno \
+		--keep-window \
+		--no-collapse \
+		--title "$1" \
+		--backtitle "Tweaks for Linux Mint Cinnamon" \
+		--yes-label "Apply" \
+		--no-label "Skip" \
+		--yesno "$2" 0 0 &&
+		result=$DIALOG_OK || result=$?
+	clear
 
-This script will:
-- Make windows maximize (instead of tile) when dragged to top of screen
-- Disable mouse acceleration
-- Hide the update manager tray icon when there are no updates available
+	if [ "$result" = "$DIALOG_OK" ]; then
+		return 0
+	fi
+
+	return 1
+}
+
+confirm_change "Configure Theme" \
+	"Do the default icons look dated? Not a fan of blue folders? Try this out.
+
+This section will:
+- Install the Papirus icon theme
+- Set the Papirus-Dark folder color to green
+- Set theme settings
+  Applications  : Mint-Y-Dark
+  Icons         : Papirus-Dark
+  Desktop       : Mint-Y-Dark"
+if [ $? = "$DIALOG_OK" ]; then
+	sudo add-apt-repository -y ppa:papirus/papirus
+	sudo apt -y update
+	sudo apt -y install papirus-icon-theme
+	sudo apt -y install papirus-folders
+	sudo apt autoremove
+
+	papirus-folders --color green --theme Papirus-Dark
+
+	gsettings set org.cinnamon.desktop.interface gtk-theme Mint-Y-Dark
+	gsettings set org.cinnamon.desktop.interface icon-theme Papirus-Dark
+	gsettings set org.cinnamon.theme name Mint-Y-Dark
+fi
+
+confirm_change "Change Annoying Defaults" \
+	"Is something bugging you? It might be one of these settings.
+
+This section will:
 - Disable bluetooth connection notifications
-
-Is this okay?
-"
-
-dialog \
-	--defaultno \
-	--no-collapse \
-	--title "Setting Tweaks for Linux Mint" \
-	--yesno "$text" 0 0 &&
-	result=$DIALOG_OK || result=$?
-
-clear
-
-if [ "$result" = "$DIALOG_OK" ]; then
-	gsettings set org.cinnamon.muffin tile-maximize true
-	gsettings set org.cinnamon.desktop.peripherals.mouse accel-profile flat
-	gsettings set com.linuxmint.updates hide-systray true
+- Disable mouse acceleration
+- Maximize windows when dragged to top of screen
+- Hide update manager tray icon when there are no updates available"
+if [ $? = "$DIALOG_OK" ]; then
 	gsettings set org.blueman.general plugin-list "['\!ConnectionNotifier']"
-
-	echo "Done!"
-else
-	echo "No changes were made."
+	gsettings set org.cinnamon.desktop.peripherals.mouse accel-profile flat
+	gsettings set org.cinnamon.muffin tile-maximize true
+	gsettings set com.linuxmint.updates hide-systray true
 fi
