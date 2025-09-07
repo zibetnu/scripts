@@ -52,8 +52,8 @@ confirm_change "Change Annoying Defaults" \
 This section will:
 - Disable bluetooth connection notifications
 - Disable mouse acceleration
-- Maximize windows when dragged to top of screen
-- Hide update manager tray icon when there are no updates available"
+- Maximize (instead of tile) when dragging a window to the top edge
+- Only show update manager tray icon when there are updates or errors"
 if [ $? = "$DIALOG_OK" ]; then
 	gsettings set org.blueman.general plugin-list "['\!ConnectionNotifier']"
 	gsettings set org.cinnamon.desktop.peripherals.mouse accel-profile flat
