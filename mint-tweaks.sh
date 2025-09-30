@@ -23,7 +23,7 @@ confirm_change() {
 }
 
 confirm_change "Configure Theme" \
-	"Do the default icons look dated? Not a fan of blue folders? Try this out.
+	"Do the default icons look dated? Try this out.
 
 This section will:
 - Install the Papirus icon theme
