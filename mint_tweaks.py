@@ -140,6 +140,12 @@ def main():
 			],
 		},
 		{
+			"title": "Use gentler notification sound",
+			"commands": [
+				"gsettings set org.cinnamon.sounds notification-file /usr/share/mint-artwork/sounds/map.oga",
+			],
+		},
+		{
 			"title": "Maximize (instead of tile) when dragging a window to the top edge",
 			"commands": [
 				"gsettings set org.cinnamon.muffin tile-maximize true",
