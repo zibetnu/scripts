@@ -3,7 +3,21 @@
 from enum import Enum
 import subprocess
 
-BACK_TITLE = '--backtitle "Tweaks for Linux Mint Cinnamon"'
+BASE_ARGS = [
+	'--backtitle "Tweaks for Linux Mint Cinnamon"',
+	"--defaultno",
+	"--no-collapse",
+]
+BASE_PROMPT_ARGS = BASE_ARGS + [
+	'--cancel-label "Skip All"',
+	"--help-button",
+	'--help-label "See Commands"',
+	"--no-hot-list",
+	'--no-label "Skip"',
+	"--no-tags",
+	'--ok-label "Apply Enabled"',
+	'--yes-label "Apply"',
+]
 DIMENSIONS = "0 0"
 
 
@@ -14,22 +28,23 @@ class ReturnCode(int, Enum):
 	ESCAPE = 255
 
 
+def clear():
+	subprocess.run("clear")
+
+
 def message(text, title="", ok_label="OK", max_width=False):
-	args = [
-		"--no-collapse",
+	args = BASE_ARGS + [
 		f'--title "{title}"',
-		BACK_TITLE,
 		f'--ok-label "{ok_label}"',
 		"--msgbox",
 		f'"{text}"',
 		"0 -1" if max_width else DIMENSIONS,
 	]
-	subprocess.call(f"dialog {' '.join(args)}", shell=True)
+	subprocess.run(f"dialog {' '.join(args)}", shell=True)
 
 
 def apply(tweak):
 	for command in tweak.get("commands"):
-		print(command)
 		subprocess.call(command, shell=True)
 
 
@@ -43,22 +58,16 @@ def see_commands(tweak):
 
 
 def prompt(tweak):
-	args = [
-		"--defaultno",
-		"--no-collapse",
+	args = BASE_PROMPT_ARGS + [
 		f'--title "{tweak.get("title", "")}"',
-		BACK_TITLE,
-		"--help-button",
-		'--yes-label "Apply"',
-		'--no-label "Skip"',
-		'--help-label "See Commands"',
 		"--yesno",
 		f'"{tweak.get("description", "")}"',
 		DIMENSIONS,
 	]
-	return_code = subprocess.call(f"dialog {' '.join(args)}", shell=True)
-	match return_code:
+	completed_process = subprocess.run(f"dialog {' '.join(args)}", shell=True)
+	match completed_process.returncode:
 		case ReturnCode.APPLY:
+			clear()
 			apply(tweak)
 
 		case ReturnCode.SEE_COMMANDS:
@@ -70,15 +79,8 @@ def prompt(tweak):
 
 
 def prompt_list(text, tweaks, title="", show_reset_message=False):
-	args = [
-		"--no-hot-list",
-		"--no-tags",
+	args = BASE_PROMPT_ARGS + [
 		f'--title "{title}"',
-		BACK_TITLE,
-		"--help-button",
-		'--ok-label "Apply Enabled"',
-		'--cancel-label "Skip All"',
-		'--help-label "See Commands"',
 		"--checklist",
 		f'"{text}"',
 		DIMENSIONS,
@@ -95,8 +97,10 @@ def prompt_list(text, tweaks, title="", show_reset_message=False):
 	output = completed_process.stderr.decode("utf-8").split(" ")
 	match completed_process.returncode:
 		case ReturnCode.APPLY:
+			clear()
 			for i in output:
-				apply(tweaks[int(i)])
+				if i.isdigit():
+					apply(tweaks[int(i)])
 
 		case ReturnCode.SEE_COMMANDS:
 			see_commands(tweaks[int(output[1])])
@@ -160,7 +164,7 @@ def main():
 		"Change Annoying Defaults",
 	)
 	message("All done!")
-	subprocess.call("clear")
+	clear()
 
 
 if __name__ == "__main__":
