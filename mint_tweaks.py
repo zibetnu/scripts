@@ -122,7 +122,7 @@ def main():
 			],
 		},
 		{
-			"title": "Configure theme",
+			"title": "Configure Theme",
 			"description": "Do the default icons look dated? Try this out.\n\nThis tweak will:\n- Install the Papirus icon theme\n- Set the Papirus-Dark folder color to green\n- Set theme settings\n  Applications  : Mint-Y-Dark\n  Icons         : Papirus-Dark\n  Desktop       : Mint-Y-Dark",
 			"commands": [
 				"sudo add-apt-repository -y ppa:papirus/papirus",
