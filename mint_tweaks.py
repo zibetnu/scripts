@@ -114,6 +114,16 @@ def prompt_list(text, tweaks, title="", show_reset_message=False):
 def main():
 	general_tweaks = [
 		{
+			"title": "Enable Automatic Updates",
+			"description": "Automatic updates ensure that you get important security fixes quickly. This tweak enables all options for automatic updates in Update Manager.\n\nConsider setting up Timeshift so you can restore a snapshot if an update causes problems.",
+			"commands": [
+				"sudo touch /var/lib/linuxmint/mintupdate-automatic-upgrades-enabled",
+				"gsettings set com.linuxmint.updates auto-update-cinnamon-spices true",
+				"gsettings set com.linuxmint.updates auto-update-flatpaks true",
+				"sudo touch /var/lib/linuxmint/mintupdate-automatic-removals-enabled",
+			],
+		},
+		{
 			"title": "Install Multimedia Codecs",
 			"description": "Multimedia codecs are required to play some video formats and to properly render some websites. This tweak will ensure they are installed.",
 			"commands": [
