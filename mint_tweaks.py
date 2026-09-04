@@ -112,7 +112,15 @@ def prompt_list(text, tweaks, title="", show_reset_message=False):
 
 
 def main():
-	major_tweaks = [
+	general_tweaks = [
+		{
+			"title": "Install Multimedia Codecs",
+			"description": "Multimedia codecs are required to play some video formats and to properly render some websites. This tweak will ensure they are installed.",
+			"commands": [
+				"sudo apt -y update",
+				"sudo apt -y install mint-meta-codecs",
+			],
+		},
 		{
 			"title": "Configure theme",
 			"description": "Do the default icons look dated? Try this out.\n\nThis tweak will:\n- Install the Papirus icon theme\n- Set the Papirus-Dark folder color to green\n- Set theme settings\n  Applications  : Mint-Y-Dark\n  Icons         : Papirus-Dark\n  Desktop       : Mint-Y-Dark",
@@ -129,7 +137,7 @@ def main():
 			],
 		},
 	]
-	for tweak in major_tweaks:
+	for tweak in general_tweaks:
 		prompt(tweak)
 
 	annoying_defaults = [
