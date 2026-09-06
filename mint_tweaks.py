@@ -78,7 +78,7 @@ def prompt(tweak):
 			message("Skipped by pressing escape.", tweak.get("title", ""))
 
 
-def prompt_list(text, tweaks, title="", show_reset_message=False):
+def prompt_list(text, tweaks, title=""):
 	args = BASE_PROMPT_ARGS + [
 		f'--title "{title}"',
 		"--checklist",
@@ -105,7 +105,7 @@ def prompt_list(text, tweaks, title="", show_reset_message=False):
 		case ReturnCode.SEE_COMMANDS:
 			see_commands(tweaks[int(output[1])])
 			message("Item selection was reset.", title)
-			prompt_list(text, tweaks, title, show_reset_message=True)
+			prompt_list(text, tweaks, title)
 
 		case ReturnCode.ESCAPE:
 			message("Skipped all by pressing escape.", title)
