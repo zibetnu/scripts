@@ -158,6 +158,12 @@ def main():
 			],
 		},
 		{
+			"title": "Prevent deleting files without first trashing them",
+			"commands": [
+				"gsettings set org.nemo.preferences enable-delete false",
+			],
+		},
+		{
 			"title": "Use gentler notification sound",
 			"commands": [
 				"gsettings set org.cinnamon.sounds notification-file /usr/share/mint-artwork/sounds/map.oga",
